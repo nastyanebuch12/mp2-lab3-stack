@@ -1,25 +1,30 @@
 #pragma once
-#include<string>
 #include <iostream>
+#include <locale.h>
+#include <math.h>
+#include <string.h>
+using namespace std;
+
 template<class T>
 class TStack
 {
-	T* pMem;
-	int MaxSize;
-	int CurrInd;
+	T* pMem; //массив
+	int MaxSize; //размер стека
+	int CurrInd; //индекс вершины
 public:
-	TStack(int _MaxSize=10)
+	TStack(int _MaxSize = 10)
 	{
-		CurrInd = -1;
+		if (_MaxSize < 0) throw ("Wrong size!\n");
 		MaxSize = _MaxSize;
-		pMem = new T[MaxSize]);
+		pMem = new T[MaxSize];
+		CurrInd = -1;
 	}
 	TStack(const TStack& s)
 	{
-		CurrInd = s.CurrInd;
 		MaxSize = s.MaxSize;
 		pMem = new T[MaxSize];
-		for (int i = 0; i <= CurrInd; i++)
+		CurrInd = s.CurrInd;
+		for (int i = 0; i <= CurrInd; i++) 
 			pMem[i] = s.pMem[i];
 	}
 	~TStack() { delete[] pMem; }
@@ -30,35 +35,57 @@ public:
 			throw "Empty";
 		return pMem[CurrInd];
 	}
-	bool IsEmpty() const { return CurrInd == -1; }
-	bool IsFull() const { return CurrInd == MaxSize - 1; }
-	T Pop()
+	bool IsEmpty() const 
+	{
+		if (CurrInd < 0)
+			return true;
+		else
+			return false;
+	}
+	bool IsFull() const 
+	{
+		if (CurrInd == MaxSize - 1)
+			return true;
+		else
+			return false;
+	}
+	T Pop() //удаление элемента с вершины стека
 	{
 		if (CurrInd == -1)
 			throw "Empty";
 		CurrInd--;
 		return pMem[CurrInd + 1];
 	}
-	void Push(const T& val)
+	void Push(const T& val) //добавить элем на вершину стека
 	{
 		if (CurrInd + 1 >= MaxSize)
 			throw "Overflow";
 		pMem[CurrInd + 1] = val;
 		CurrInd++;
 	}
-	friend ostream& operator<<(ostream& out, const TStack& s)
-	{
-		for (int i = 0; i <= s.CurrInd; i++)
-			out << s.pMem[i] << ' ';
-		return out;
+	void Clear() //очистить стек
+	{				
+		CurrInd = -1;
+		delete[] pMem;
 	}
-	TStack operator=(const TStack s)
-	{
 
-	}
-	TStack Clear(TStack s)
+	friend istream& operator>>(istream& istr, TStack& s)
 	{
-		s.CurrInd = -1;
+		for (int i = 0; i < s.MaxSize; i++)
+			istr >> s.pMem[i];
+		return istr;
+	}
+	friend ostream& operator<<(ostream& ostr, const TStack& s)
+	{
+		if (s.CurrInd == -1) {
+			ostr << "Stack Is Empty" << endl;
+		}
+		else {
+			for (int i = 0; i < s.CurrInd; i++)
+				ostr << s.pMem[i] << ' ';
+			ostr << endl;
+		}
+		return ostr;
 	}
 };
 
