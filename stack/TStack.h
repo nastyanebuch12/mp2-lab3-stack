@@ -12,14 +12,14 @@ class TStack
 	int MaxSize; //размер стека
 	int CurrInd; //индекс вершины
 public:
-	TStack(int _MaxSize = 10)
+	TStack(int _MaxSize = 10) //конструктор
 	{
-		if (_MaxSize < 0) throw ("Wrong size!\n");
+		if (_MaxSize < 1) throw ("Wrong size!\n");
 		MaxSize = _MaxSize;
 		pMem = new T[MaxSize];
 		CurrInd = -1;
 	}
-	TStack(const TStack& s)
+	TStack(const TStack& s) //конструктор копирования
 	{
 		MaxSize = s.MaxSize;
 		pMem = new T[MaxSize];
