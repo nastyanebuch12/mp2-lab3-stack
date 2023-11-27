@@ -19,10 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Form.h" />
+    <ClInclude Include="TCalculator.h" />
     <ClInclude Include="TStack.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mp2-lab3-stack.cpp" />
+    <ClCompile Include="TCalculator.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

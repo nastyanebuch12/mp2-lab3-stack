@@ -27,285 +27,81 @@ TEST(TStack, new_stack_is_empty)
     EXPECT_EQ(true, q);
 }
 
-TEST(TStack, can_set_bit)
+TEST(TStack, can_push_pop)
 {
-  TStack s(10);
+  TStack<int> s(3);
+  int x1 = 1;
+  int x2 = 2;
+  int x3 = 3;
 
-  EXPECT_EQ(0, s.GetBit(3));
+  ASSERT_NO_THROW(s.Push(x1));
+  ASSERT_NO_THROW(s.Push(x2));
+  ASSERT_NO_THROW(s.Push(x3));
 
-  s.SetBit(3);
-  EXPECT_NE(0, s.GetBit(3));
+  int y1, y2, y3;
+
+  ASSERT_NO_THROW(y1 = s.Pop()); //y1=x3
+  ASSERT_NO_THROW(y2 = s.Pop());
+  ASSERT_NO_THROW(y3 = s.Pop());
+
+  EXPECT_EQ(y1, x3);
+  EXPECT_EQ(y2, x2);
+  EXPECT_EQ(y3, x1);
 }
 
-TEST(TStack, can_clear_bit)
+TEST(TStack, throws_when_ask_top_of_empty_stack)
 {
-  TStack s(10);
+    TStack<int> s(3);
 
-  int bitIdx = 3;
-
-  s.SetBit(bitIdx);
-  EXPECT_NE(0, s.GetBit(bitIdx));
-
-  s.ClrBit(bitIdx);
-  EXPECT_EQ(0, s.GetBit(bitIdx));
+    ASSERT_ANY_THROW(s.top());
 }
 
-TEST(TStack, throws_when_create_bitfield_with_negative_length)
+TEST(TStack, throws_when_pop_from_empty_stack)
 {
-  ASSERT_ANY_THROW(TStack s(-3));
+    TStack<int> s(3);
+
+    ASSERT_ANY_THROW(s.Pop());
 }
 
-TEST(TStack, throws_when_set_bit_with_negative_index)
+TEST(TStack, throws_when_push_to_overflow_stack)
 {
-  TStack s(10);
+    TStack<int> s(2);
+    s.Push(1);
+    s.Push(2);
 
-  ASSERT_ANY_THROW(s.SetBit(-3));
+    ASSERT_ANY_THROW(s.Push(3));
 }
 
-TEST(TStack, throws_when_set_bit_with_too_large_index)
+TEST(TStack, return_true_when_use_Full_on_full_stack)
 {
-  TStack s(10);
+    TStack<int> s(2);
+    s.Push(1);
+    s.Push(2);
+    bool is = s.IsFull();
 
-  ASSERT_ANY_THROW(s.SetBit(11));
+    EXPECT_EQ(true, is);
 }
-
-TEST(TStack, throws_when_get_bit_with_negative_index)
+TEST(TStack, return_false_when_use_Full_on_not_full_stack)
 {
-  TStack s(10);
+    TStack<int> s(2);
+    s.Push(1);
+    bool is = s.IsFull();
 
-  ASSERT_ANY_THROW(s.GetBit(-3));
+    EXPECT_EQ(false, is);
 }
-
-TEST(TStack, throws_when_get_bit_with_too_large_index)
+TEST(TStack, return_true_when_use_Empty_on_empty_stack)
 {
-  TStack s(10);
+    TStack<int> st(3);
 
-  ASSERT_ANY_THROW(s.GetBit(11));
+    bool b1 = st.IsEmpty();
+    EXPECT_EQ(1, b1);
 }
-
-TEST(TStack, throws_when_clear_bit_with_negative_index)
+TEST(TStack, return_false_when_use_Empty_on_not_empty_stack)
 {
-  TStack s(10);
+    TStack<int> st(3);
+    st.Push(1);
+    st.Push(1);
 
-  ASSERT_ANY_THROW(s.ClrBit(-3));
+    bool b1 = st.IsEmpty();
+    EXPECT_EQ(0, b1);
 }
-
-TEST(TStack, throws_when_clear_bit_with_too_large_index)
-{
-  TStack s(10);
-
-  ASSERT_ANY_THROW(s.ClrBit(11));
-}
-
-TEST(TStack, can_assign_bitfields_of_equal_size)
-{
-  const int size = 2;
-  TStack s1(size), s2(size);
-  for (int i = 0; i < size; i++)
-  {
-    s1.SetBit(i);
-  }
-  s2 = s1;
-
-  EXPECT_NE(0, s2.GetBit(0));
-  EXPECT_NE(0, s2.GetBit(1));
-}
-
-TEST(TStack, assign_operator_changes_bitfield_size)
-{
-  const int size1 = 2, size2 = 5;
-  TStack s1(size1), s2(size2);
-  for (int i = 0; i < size1; i++)
-  {
-    s1.SetBit(i);
-  }
-  s2 = s1;
-
-  EXPECT_EQ(2, s2.GetLength());
-}
-
-TEST(TStack, can_assign_bitfields_of_non_equal_size)
-{
-  const int size1 = 2, size2 = 5;
-  TStack s1(size1), s2(size2);
-  for (int i = 0; i < size1; i++)
-  {
-    s1.SetBit(i);
-  }
-  s2 = s1;
-
-  EXPECT_NE(0, s2.GetBit(0));
-  EXPECT_NE(0, s2.GetBit(1));
-}
-
-TEST(TStack, compare_equal_bitfields_of_equal_size)
-{
-  const int size = 2;
-  TStack s1(size), s2(size);
-  for (int i = 0; i < size; i++)
-  {
-    s1.SetBit(i);
-  }
-  s2 = s1;
-
-  EXPECT_EQ(s1, s2);
-}
-
-TEST(TStack, or_operator_applied_to_bitfields_of_equal_size)
-{
-  const int size = 4;
-  TStack s1(size), s2(size), exps(size);
-  // s1 = 0011
-  s1.SetBit(2);
-  s1.SetBit(3);
-  // s2 = 0101
-  s2.SetBit(1);
-  s2.SetBit(3);
-
-  // exps = 0111
-  exps.SetBit(1);
-  exps.SetBit(2);
-  exps.SetBit(3);
-
-  EXPECT_EQ(exps, s1 | s2);
-}
-
-TEST(TStack, or_operator_applied_to_bitfields_of_non_equal_size)
-{
-  const int size1 = 4, size2 = 5;
-  TStack s1(size1), s2(size2), exps(size2);
-  // s1 = 0011
-  s1.SetBit(2);
-  s1.SetBit(3);
-  // s2 = 01010
-  s2.SetBit(1);
-  s2.SetBit(3);
-
-  // exps = 01110
-  exps.SetBit(1);
-  exps.SetBit(2);
-  exps.SetBit(3);
-
-  EXPECT_EQ(exps, s1 | s2);
-}
-
-TEST(TStack, and_operator_applied_to_bitfields_of_equal_size)
-{
-  const int size = 4;
-  TStack s1(size), s2(size), exps(size);
-  // s1 = 0011
-  s1.SetBit(2);
-  s1.SetBit(3);
-  // s2 = 0101
-  s2.SetBit(1);
-  s2.SetBit(3);
-
-  // exps = 0001
-  exps.SetBit(3);
-
-  EXPECT_EQ(exps, s1 & s2);
-}
-
-TEST(TStack, and_operator_applied_to_bitfields_of_non_equal_size)
-{
-  const int size1 = 4, size2 = 5;
-  TStack s1(size1), s2(size2), exps(size2);
-  // s1 = 0011
-  s1.SetBit(2);
-  s1.SetBit(3);
-  // s2 = 01010
-  s2.SetBit(1);
-  s2.SetBit(3);
-
-  // exps = 00010
-  exps.SetBit(3);
-
-  EXPECT_EQ(exps, s1 & s2);
-}
-
-TEST(TStack, can_invert_bitfield)
-{
-  const int size = 2;
-  TStack s(size), negs(size), expNegs(size);
-  // s = 01
-  s.SetBit(1);
-  negs = ~s;
-
-  // expNegs = 10
-  expNegs.SetBit(0);
-
-  EXPECT_EQ(expNegs, negs);
-}
-
-TEST(TStack, can_invert_large_bitfield)
-{
-  const int size = 38;
-  TStack s(size), negs(size), expNegs(size);
-  s.SetBit(35);
-  negs = ~s;
-
-  for(int i = 0; i < size; i++)
-    expNegs.SetBit(i);
-  expNegs.ClrBit(35);
-
-  EXPECT_EQ(expNegs, negs);
-}
-
-TEST(TStack, invert_plus_and_operator_on_different_size_bitfield)
-{
-  const int firstSze = 4, secondSize = 8;
-  TStack firsts(firstSze), negFirsts(firstSze), seconds(secondSize), tests(secondSize);
-  // firsts = 0001
-  firsts.SetBit(0);
-  negFirsts = ~firsts;
-  // negFirsts = 1110
-
-  // seconds = 00011000
-  seconds.SetBit(3);
-  seconds.SetBit(4);
-
-  // tests = 00001000
-  tests.SetBit(3);
-
-  EXPECT_EQ(seconds & negFirsts, tests);
-}
-
-TEST(TStack, can_invert_many_random_bits_bitfield)
-{
-  const int size = 38;
-  TStack s(size), negs(size), expNegs(size);
-
-  std::vector<int> bits;
-  bits.push_back(0);
-  bits.push_back(1);
-  bits.push_back(14);
-  bits.push_back(16);
-  bits.push_back(33);
-  bits.push_back(37);
-
-  for (unsigned int i = 0; i < bits.size(); i++)
-    s.SetBit(bits[i]);
-
-  negs = ~s;
-
-  for(int i = 0; i < size; i++)
-    expNegs.SetBit(i);
-  for (unsigned int i = 0; i < bits.size(); i++)
-    expNegs.ClrBit(bits[i]);
-
-  EXPECT_EQ(expNegs, negs);
-}
-
-TEST(TStack, bitfields_with_different_bits_are_not_equal)
-{
-  const int size = 4;
-  TStack s1(size), s2(size);
-
-  s1.SetBit(1);
-  s1.SetBit(3);
-
-  s2.SetBit(1);
-  s2.SetBit(2);
-
-  EXPECT_NE(s1, s2);
-}*/

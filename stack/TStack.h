@@ -1,6 +1,5 @@
 #pragma once
 #include <iostream>
-#include <locale.h>
 #include <math.h>
 #include <string.h>
 using namespace std;
