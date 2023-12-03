@@ -1,16 +1,16 @@
 #include "TCalculator.h"
 
-void TCalculator::set_infix(string str)
+void TCalculator::SetInfix(string str)
 {
     infix = str;
 }
 
-string TCalculator::get_postfix()
+string TCalculator::GetPostfix()
 {
     return postfix;
 }
 
-string TCalculator::get_infix()
+string TCalculator::GetInfix()
 {
     return infix;
 }

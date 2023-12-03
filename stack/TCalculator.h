@@ -22,9 +22,9 @@ public:
 	double Calc();
 	void ToPostfix();
 	TCalculator(string& str) :infix(str) { ToPostfix(); };
-	void set_infix(string str);
-	string get_postfix();
-	string get_infix();
+	void SetInfix(string str);
+	string GetPostfix();
+	string GetInfix();
 	double CalcPostfix();
 
 };

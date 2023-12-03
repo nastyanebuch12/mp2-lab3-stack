@@ -4,65 +4,65 @@
 
 TEST(TCalculator, can_create_calculator_with_positive_size_of_str)
 {
-    string a = "1+2";
+    string s = "1+2";
 
-    ASSERT_NO_THROW(TCalculator calc(a));
+    ASSERT_NO_THROW(TCalculator calc(s));
 }
-TEST(TCalculator, can_get_infix_form_of_calculator)
+TEST(TCalculator, can_GetInfix_form_of_calculator)
 {
-    string a = "2+(3*5)";
-    string b;
-    TCalculator calc(a);
+    string s1 = "2+(3*2)";
+    string s2;
+    TCalculator calc(s1);
 
-    ASSERT_NO_THROW(b = calc.get_infix());
-    EXPECT_EQ(a, b);
+    ASSERT_NO_THROW(s2 = calc.GetInfix());
+    EXPECT_EQ(s1, s2);
 }
-TEST(TCalculator, can_set_infix_form_of_calculator)
+TEST(TCalculator, can_SetInfix_form_of_calculator)
 {
-    string a = "2+(3*5)";
-    string b;
-    TCalculator calc(a);
+    string s1 = "2+(3*2)";
+    string s2;
+    TCalculator calc(s1);
 
-    ASSERT_NO_THROW(calc.set_infix(b));
-    EXPECT_EQ(calc.get_infix(), b);
+    ASSERT_NO_THROW(calc.SetInfix(s2));
+    EXPECT_EQ(calc.GetInfix(), s2);
 }
 TEST(TCalculator, can_get_correct_postfix_form_of_calculator_if_the_number_of_brackets_is_correct)
 {
-    string a = "2+(3*5)";
-    string b = "235*+";
-    string c;
-    TCalculator calc(a);
+    string s1 = "2+(3*2)";
+    string s2 = "232*+";
+    string s3;
+    TCalculator calc(s1);
 
-    ASSERT_NO_THROW(c = calc.get_postfix());
-    EXPECT_EQ(c, b);
+    ASSERT_NO_THROW(s3 = calc.GetPostfix());
+    EXPECT_EQ(s2, s3);
 }
 TEST(TCalculator, cant_get_correct_postfix_form_of_calculator_if_the_number_of_brackets_is_incorrect)
 {
-    string a = "2+((3*5)";
-    string b = "235*+";
-    string c;
-    TCalculator calc(a);
-    c = calc.get_postfix();
+    string s1 = "2+((3*2)";
+    string s2 = "232*+";
+    string s3;
+    TCalculator calc(s1);
+    s3 = calc.GetPostfix();
 
-    EXPECT_NE(c, b);
+    EXPECT_NE(s2, s3);
 }
 
 TEST(TCalculator, can_calculat_if_the_number_of_brackets_is_correct)
 {
-    string a = "2+(3*5)";
-    TCalculator calc(a);
+    string s = "2+(3*2)";
+    TCalculator calc(s);
     double check;
 
     ASSERT_NO_THROW(check = calc.CalcPostfix());
-    EXPECT_EQ(17, check);
+    EXPECT_EQ(check, 8);
 }
 
 TEST(TCalculator, cant_calculat_if_the_number_of_brackets_is_incorrect)
 {
-    string a = "2+((3*5)";
-    TCalculator calc(a);
+    string s = "2+((3*2)";
+    TCalculator calc(s);
     double check;
 
     ASSERT_ANY_THROW(check = calc.CalcPostfix());
-    EXPECT_NE(17, check);
+    EXPECT_NE(check, 8);
 }
